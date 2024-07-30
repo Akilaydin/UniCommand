@@ -13,12 +13,12 @@ public class PlatformRepository(PlatformServiceDbContext dbContext) : IPlatformR
 
 	public Task<List<Platform>> GetAllPlatformsAsync()
 	{
-		return dbContext.Platforms.ToListAsync();
+		return dbContext.Platforms.Include(p => p.Cost).ToListAsync();
 	}
 
 	public Task<Platform?> GetPlatformByIdAsync(int id)
 	{
-		return dbContext.Platforms.FirstOrDefaultAsync(p => p.Id == id);
+		return dbContext.Platforms.Include(p => p.Cost).FirstOrDefaultAsync(p => p.Id == id);
 	}
 
 	public async Task AddPlatformAsync(Platform platform)
