@@ -5,12 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 using OriApps.UniCommand.PlatformService.Data;
 using OriApps.UniCommand.PlatformService.Data.DTO;
 using OriApps.UniCommand.PlatformService.Models;
+using OriApps.UniCommand.PlatformService.Services;
 
 namespace OriApps.UniCommand.PlatformService.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PlatformsController(IPlatformRepository platformRepository, IMapper mapper) : ControllerBase
+public class PlatformsController(IPlatformRepository platformRepository, IMapper mapper, ICommandDataClient commandDataClient) : ControllerBase
 {
 	[HttpGet]
 	public async Task<ActionResult<IEnumerable<PlatformReadDTO>>> GetPlatforms()
@@ -57,7 +58,15 @@ public class PlatformsController(IPlatformRepository platformRepository, IMapper
 
 		var readDto = mapper.Map<PlatformReadDTO>(platform);
 
+		try
+		{
+			await commandDataClient.SendPlatformToCommand(readDto);
+		} 
+		catch (Exception e)
+		{
+			Console.WriteLine($"Error while sending platform to command: {e}");
+		}
+		
 		return CreatedAtAction(nameof(GetPlatformById), new { id = platform.Id }, readDto);
 	}
-
 }
