@@ -15,6 +15,12 @@ spec:
       containers:
         - name: platformservice
           image: akilaydin/platformservice:latest
+          env:
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-password
+                key: POSTGRES_PASSWORD
       imagePullSecrets:
         - name: regcred
 ---
