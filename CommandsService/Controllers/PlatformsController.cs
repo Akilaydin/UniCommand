@@ -1,16 +1,23 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+
+using Microsoft.AspNetCore.Mvc;
+
+using OriApps.UniCommand.CommandsService.Data;
+using OriApps.UniCommand.CommandsService.Data.DTO;
 
 namespace OriApps.UniCommand.CommandsService.Controllers;
 
 [Route("api/commands/[controller]")]
 [ApiController]
-public class PlatformsController : ControllerBase
+public class PlatformsController(ICommandRepository repository, IMapper mapper) : ControllerBase
 {
-	[HttpPost]
-	public ActionResult TestInboundConnection()
+	[HttpGet]
+	public async Task<ActionResult<IEnumerable<PlatformReadDTO>>> GetPlatforms()
 	{
-		Console.WriteLine("TestInboundConnection");
+		Console.WriteLine("Getting Platforms");
 		
-		return Ok("InboundConnection successful");
+		var platforms = await repository.GetAllPlatformsAsync();
+		
+		return Ok(mapper.Map<IEnumerable<PlatformReadDTO>>(platforms));
 	}
 }
