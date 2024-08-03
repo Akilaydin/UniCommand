@@ -12,7 +12,9 @@ public interface ICommandRepository
 	
 	Task<Command?> GetCommandByIdAsync(int platformId, int commandId);
 	Task<bool> PlatformExistsAsync(int platformId);
-	
+
+	Task<bool> ExternalPlatformExistsAsync(int externalPlatformId);
+
 	Task CreateCommandAsync(int platformId, Command command);
 	Task CreatePlatformAsync(Platform platform);
 }

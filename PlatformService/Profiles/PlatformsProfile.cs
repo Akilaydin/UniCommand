@@ -15,6 +15,8 @@ public class PlatformsProfile : Profile
 		
 		CreateMap<PlatformCreateDTO, Platform>()
 			.ForMember(dest => dest.Cost, opt => opt.MapFrom<CostTypeResolver>());
+
+		CreateMap<PlatformReadDTO, PlatformPublishedDTO>();
 	}
 }
 

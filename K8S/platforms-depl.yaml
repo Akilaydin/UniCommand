@@ -37,3 +37,7 @@ spec:
       protocol: TCP
       port: 8080
       targetPort: 8080
+    - name: platformservicegrpc
+      protocol: TCP
+      port: 123
+      targetPort: 123

@@ -32,6 +32,7 @@ else
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddScoped<IPlatformRepository, PlatformRepository>();
+builder.Services.AddSingleton<IMessageBusClient, MessageBusClient>();
 builder.Services.AddHttpClient<ICommandDataClient, CommandDataClient>();
 
 builder.Services.AddControllers();

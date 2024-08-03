@@ -11,7 +11,7 @@ namespace OriApps.UniCommand.PlatformService.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PlatformsController(IPlatformRepository platformRepository, IMapper mapper, ICommandDataClient commandDataClient) : ControllerBase
+public class PlatformsController(IPlatformRepository platformRepository, IMapper mapper, ICommandDataClient commandDataClient, IMessageBusClient messageBusClient) : ControllerBase
 {
 	[HttpGet]
 	public async Task<ActionResult<IEnumerable<PlatformReadDTO>>> GetPlatforms()
@@ -60,11 +60,22 @@ public class PlatformsController(IPlatformRepository platformRepository, IMapper
 
 		try
 		{
-			await commandDataClient.SendPlatformToCommand(readDto);
+			//await commandDataClient.SendPlatformToCommand(readDto);
 		} 
 		catch (Exception e)
 		{
-			Console.WriteLine($"Error while sending platform to command: {e}");
+			Console.WriteLine($"Error while sending synchronous message about platform to command: {e}");
+		}
+		
+		try
+		{
+			var publishedDto = mapper.Map<PlatformPublishedDTO>(readDto);
+			publishedDto.Event = "PlatformPublished";
+			messageBusClient.PublishNewPlatform(publishedDto);
+		} 
+		catch (Exception e)
+		{
+			Console.WriteLine($"Error while publishing platform to command: {e}");
 		}
 		
 		return CreatedAtAction(nameof(GetPlatformById), new { id = platform.Id }, readDto);

@@ -10,5 +10,8 @@ public class PlatformsProfile : Profile
 	public PlatformsProfile()
 	{
 		CreateMap<Platform, PlatformReadDTO>();
+		CreateMap<PlatformPublishedDTO, Platform>()
+			.ForMember(to => to.ExtermalId, 
+				opt => opt.MapFrom(from => from.Id));
 	}
 }

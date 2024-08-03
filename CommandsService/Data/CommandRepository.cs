@@ -35,6 +35,11 @@ public class CommandRepository(CommandsDbContext dbContext) : ICommandRepository
 	{
 		return dbContext.Platforms.AnyAsync(x => x.Id == platformId);
 	}
+	
+	public Task<bool> ExternalPlatformExistsAsync(int externalPlatformId)
+	{
+		return dbContext.Platforms.AnyAsync(x => x.ExtermalId == externalPlatformId);
+	}
 
 	public async Task CreateCommandAsync(int platformId, Command command)
 	{

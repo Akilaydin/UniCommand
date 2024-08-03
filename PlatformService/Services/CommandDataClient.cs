@@ -22,13 +22,8 @@ public class CommandDataClient(HttpClient httpClient, IConfiguration configurati
 
 		var response = await httpClient.PostAsync(targetUrl, content);
 
-		if (response.IsSuccessStatusCode)
-		{
-			Console.WriteLine(await response.Content.ReadAsStringAsync());
-		}
-		else
-		{
-			Console.WriteLine(response.StatusCode);
-		}
+		Console.WriteLine(response.IsSuccessStatusCode 
+			? $"Platform sent successfully {await response.Content.ReadAsStringAsync()}"
+			: $"Error while sending platform to command: {response.StatusCode}");
 	}
 }
