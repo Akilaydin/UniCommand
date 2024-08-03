@@ -17,6 +17,10 @@ public class PlatformsProfile : Profile
 			.ForMember(dest => dest.Cost, opt => opt.MapFrom<CostTypeResolver>());
 
 		CreateMap<PlatformReadDTO, PlatformPublishedDTO>();
+		CreateMap<Platform, GrpcPlatformModel>()
+			.ForMember(destination => destination.PlatformId, opt => opt.MapFrom(source => source.Id))
+			.ForMember(destination => destination.Name, opt => opt.MapFrom(source => source.Name))
+			.ForMember(destination => destination.Publisher, opt => opt.MapFrom(source => source.Publisher));
 	}
 }
 

@@ -30,6 +30,7 @@ else
 }
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddGrpc();
 
 builder.Services.AddScoped<IPlatformRepository, PlatformRepository>();
 builder.Services.AddSingleton<IMessageBusClient, MessageBusClient>();
@@ -41,6 +42,11 @@ var app = builder.Build();
 
 app.UseRouting();
 app.MapControllers();
+app.MapGrpcService<GrpcPlatformService>();
+app.MapGet("/protos/platforms.proto", async context =>
+{
+	await context.Response.WriteAsync(File.ReadAllText("platforms.proto"));
+});
 
 if (app.Environment.IsProduction())
 {
